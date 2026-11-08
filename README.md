@@ -13,6 +13,7 @@ Hands-on Azure administration lab built as one connected environment, not six se
 Dashed boxes and edges are planned or in progress.
 
 ```mermaid
+%%{init: {"theme": "dark"}}%%
 flowchart TB
     subgraph ENTRA["Microsoft Entra ID"]
         USERS["Users<br/>lab.vmadmin, lab.webdev, lab.reader"]
@@ -78,15 +79,15 @@ flowchart TB
     POLICY -.->|"requires env tag"| VM
     APP -.->|"diagnostics"| LAW
 
-    classDef ident fill:#ede7f6,stroke:#5e35b1,stroke-width:2px
-    classDef net fill:#e3f2fd,stroke:#1565c0,stroke-width:2px
-    classDef storage fill:#fff3e0,stroke:#ef6c00,stroke-width:2px
-    classDef compute fill:#e8f5e9,stroke:#2e7d32,stroke-width:2px
-    classDef sec fill:#ffebee,stroke:#c62828,stroke-width:2px
-    classDef mon fill:#e0f7fa,stroke:#00838f,stroke-width:2px
-    classDef gov fill:#f5f5f5,stroke:#616161,stroke-width:2px
-    classDef notify fill:#fce4ec,stroke:#ad1457,stroke-width:2px
-    classDef planned stroke-dasharray: 5 5,stroke:#9e9e9e
+    classDef ident fill:#4527a0,stroke:#b39ddb,color:#ffffff,stroke-width:2px
+    classDef net fill:#0d47a1,stroke:#90caf9,color:#ffffff,stroke-width:2px
+    classDef storage fill:#e65100,stroke:#ffb74d,color:#ffffff,stroke-width:2px
+    classDef compute fill:#1b5e20,stroke:#a5d6a7,color:#ffffff,stroke-width:2px
+    classDef sec fill:#b71c1c,stroke:#ef9a9a,color:#ffffff,stroke-width:2px
+    classDef mon fill:#006064,stroke:#80deea,color:#ffffff,stroke-width:2px
+    classDef gov fill:#37474f,stroke:#b0bec5,color:#ffffff,stroke-width:2px
+    classDef notify fill:#ad1457,stroke:#f48fb1,color:#ffffff,stroke-width:2px
+    classDef planned fill:#263238,stroke:#78909c,color:#eceff1,stroke-dasharray: 5 5
 
     class USERS,GROUPS,CA,PIM ident
     class SNET1,SNET2,PE,DNS net
@@ -98,11 +99,11 @@ flowchart TB
     class EMAIL notify
     class CA,PIM,APP planned
 
-    style ENTRA fill:#f6f1fb,stroke:#5e35b1
-    style RGN fill:#f2f8fd,stroke:#1565c0
-    style VNET fill:#e8f1fb,stroke:#1565c0
-    style RGV fill:#f3faf4,stroke:#2e7d32
-    style SUB fill:#fdfdfd,stroke:#9e9e9e
+    style ENTRA fill:#2a1a5e,stroke:#7e57c2
+    style RGN fill:#0b1f3a,stroke:#1565c0
+    style VNET fill:#0e2a4f,stroke:#1e88e5
+    style RGV fill:#12321d,stroke:#2e7d32
+    style SUB fill:#101418,stroke:#546e7a
 ```
 
 - **Identity:** Entra ID users and groups drive RBAC across every project

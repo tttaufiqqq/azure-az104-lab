@@ -18,8 +18,8 @@ flowchart TB
     subgraph ENTRA["Microsoft Entra ID"]
         USERS["Users<br/>lab.vmadmin, lab.webdev, lab.reader"]
         GROUPS["Security groups<br/>grp-vm-operators<br/>grp-webapp-contributors<br/>grp-lab-readers"]
-        CA["Conditional Access, MFA<br/>05 - in progress"]
-        PIM["PIM and access reviews<br/>05 - in progress"]
+        CA["Conditional Access, MFA<br/>CA-require-mfa-azure-mgmt"]
+        PIM["PIM and access reviews<br/>AR-grp-vm-operators-quarterly"]
         USERS --> GROUPS
     end
 
@@ -54,8 +54,8 @@ flowchart TB
     EMAIL["Email notification"]
 
     GROUPS -->|"custom role VM Operator Custom"| VM
-    CA -.->|"MFA for Azure management"| GROUPS
-    PIM -.->|"eligible roles, reviews"| GROUPS
+    CA -->|"MFA for Azure management"| GROUPS
+    PIM -->|"eligible roles, reviews"| GROUPS
     GROUPS -.->|"Website Contributor"| APP
 
     VM -->|"NIC"| SNET1
@@ -97,7 +97,7 @@ flowchart TB
     class DCR,LAW,AMETRIC,ALOG,AG,RSV mon
     class BUDGET gov
     class EMAIL notify
-    class CA,PIM,APP planned
+    class APP planned
 
     style ENTRA fill:#2a1a5e,stroke:#7e57c2
     style RGN fill:#0b1f3a,stroke:#1565c0
@@ -121,7 +121,7 @@ flowchart TB
 | 2 | [02-network-storage](02-network-storage/) | VNet, NSG, private endpoint, ARM template | ✅ |
 | 3 | [03-vm-rbac](03-vm-rbac/) | VM, custom RBAC role, tag policy, encryption, budget alert | ✅ |
 | 4 | [04-monitoring-backup](04-monitoring-backup/) | Alerts, Log Analytics, KQL, VM backup and restore | ✅ |
-| 5 | [05-entra-ca-pim](05-entra-ca-pim/) | Conditional Access, PIM, access review, sign-in logs | 🟨 |
+| 5 | [05-entra-ca-pim](05-entra-ca-pim/) | Conditional Access, PIM, access review, sign-in logs | ✅ |
 | 6 | [06-app-service](06-app-service/) | Slots, zero-downtime swap, autoscale, backup | ⬜ |
 
 ## Project Summaries
@@ -151,10 +151,11 @@ flowchart TB
 - Recovery Services vault, backup policy, and a verified test restore
 
 ### 05 – Entra Conditional Access and PIM
-- Conditional Access policy requiring MFA for one app
-- PIM with approval-based activation (eligible vs active)
-- Access review on the lab groups
-- Sign-in log check, also queried in KQL
+- Entra ID P2 trial and license assignment
+- Conditional Access policy requiring MFA for Azure management
+- PIM Security Reader role with approval-based activation
+- Access review on `grp-vm-operators`, decided and completed
+- Sign-in log check
 
 ### 06 – App Service
 - S1 plan with production and staging slots

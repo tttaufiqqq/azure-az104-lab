@@ -10,14 +10,84 @@ Hands-on Azure administration lab built as one connected environment, not six se
 
 ## Architecture
 
-![Architecture diagram](docs/architecture.png)
+Dashed boxes and edges are planned or in progress.
+
+```mermaid
+flowchart TB
+    subgraph ENTRA["Microsoft Entra ID"]
+        USERS["Users<br/>lab.vmadmin, lab.webdev, lab.reader"]
+        GROUPS["Security groups<br/>grp-vm-operators<br/>grp-webapp-contributors<br/>grp-lab-readers"]
+        CA["Conditional Access, MFA<br/>05 - in progress"]
+        PIM["PIM and access reviews<br/>05 - in progress"]
+        USERS --> GROUPS
+    end
+
+    subgraph SUB["Azure subscription - Malaysia West"]
+        BUDGET["Budget<br/>budget-lab-monthly<br/>scoped to the billing account"]
+
+        subgraph RGN["rg-lab-network"]
+            subgraph VNET["vnet-lab 10.0.0.0/16"]
+                SNET1["snet-resources<br/>10.0.1.0/24<br/>nsg-resources"]
+                SNET2["snet-privateendpoints<br/>10.0.2.0/24"]
+            end
+            PE["Private endpoint<br/>pe-stlablab-blob<br/>IP 10.0.2.4"]
+            DNS["Private DNS zone<br/>privatelink.blob.core.windows.net"]
+            STORAGE["Storage account stlablab<br/>public access disabled"]
+        end
+
+        subgraph RGV["rg-lab-vm"]
+            POLICY["Azure Policy<br/>require-env-tag"]
+            VM["vm-lab-01<br/>Ubuntu 24.04 + data disk"]
+            KV["Key Vault<br/>kv-lab-03"]
+            DCR["Data collection rule<br/>dcr-lab-vm"]
+            LAW["Log Analytics<br/>law-lab"]
+            AMETRIC["Metric alert<br/>CPU above 70 percent"]
+            ALOG["Log alert<br/>failed SSH logins"]
+            AG["Action group<br/>ag-lab-email"]
+            RSV["Recovery Services vault<br/>rsv-lab"]
+        end
+
+        APP["App Service<br/>slots, autoscale, backup<br/>06 - planned"]
+    end
+
+    EMAIL["Email notification"]
+
+    GROUPS -->|"custom role VM Operator Custom"| VM
+    CA -.->|"MFA for Azure management"| GROUPS
+    PIM -.->|"eligible roles, reviews"| GROUPS
+    GROUPS -.->|"Website Contributor"| APP
+
+    VM -->|"NIC"| SNET1
+    VM -.->|"resolves stlablab to 10.0.2.4"| DNS
+    DNS -.->|"linked to"| VNET
+    PE --- SNET2
+    PE -->|"registers A record"| DNS
+    PE -->|"private link"| STORAGE
+
+    VM -->|"encrypts data disk"| KV
+    VM -->|"Azure Monitor Agent"| DCR
+    DCR -->|"Perf and Syslog"| LAW
+    LAW --> ALOG
+    VM -->|"platform metrics"| AMETRIC
+    AMETRIC --> AG
+    ALOG --> AG
+    AG --> EMAIL
+
+    VM -->|"daily backup"| RSV
+    RSV -->|"reads keys and secrets"| KV
+    POLICY -.->|"requires env tag"| VM
+    APP -.->|"diagnostics"| LAW
+
+    classDef planned stroke-dasharray: 5 5,color:#666
+    class CA,PIM,APP planned
+```
 
 - **Identity:** Entra ID users and groups drive RBAC across every project
 - **Network:** one VNet with a resource subnet, a private endpoint subnet, and an NSG
 - **Compute:** a VM in the resource subnet, plus an App Service with slots
-- **Storage:** private-endpoint storage account with public access disabled
+- **Storage:** `stlablab` with public access disabled, reachable only through `pe-stlablab-blob` at 10.0.2.4
 - **Operations:** one Log Analytics workspace, shared alerts, Recovery Services vault
-- **Governance:** tag policy and budget alert at subscription level
+- **Governance:** tag policy and budget alert scoped to the billing account
 
 ## Build Order
 
@@ -89,7 +159,6 @@ azure-az104-lab/
 ├── 04-monitoring-backup/
 ├── 05-entra-ca-pim/
 ├── 06-app-service/
-├── docs/
 └── templates/
 ```
 

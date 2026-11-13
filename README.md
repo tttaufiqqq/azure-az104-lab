@@ -10,7 +10,7 @@ Hands-on Azure administration lab built as one connected environment, not six se
 
 ## Architecture
 
-Dashed boxes and edges are planned or in progress.
+Dashed edges are planned.
 
 ```mermaid
 %%{init: {"theme": "dark"}}%%
@@ -48,7 +48,7 @@ flowchart TB
             RSV["Recovery Services vault<br/>rsv-lab"]
         end
 
-        APP["App Service<br/>slots, autoscale, backup<br/>06 - planned"]
+        APP["App Service asp-lab / app-lab-1612<br/>slots, autoscale, backup"]
     end
 
     EMAIL["Email notification"]
@@ -87,7 +87,6 @@ flowchart TB
     classDef mon fill:#006064,stroke:#80deea,color:#ffffff,stroke-width:2px
     classDef gov fill:#37474f,stroke:#b0bec5,color:#ffffff,stroke-width:2px
     classDef notify fill:#ad1457,stroke:#f48fb1,color:#ffffff,stroke-width:2px
-    classDef planned fill:#263238,stroke:#78909c,color:#eceff1,stroke-dasharray: 5 5
 
     class USERS,GROUPS,CA,PIM ident
     class SNET1,SNET2,PE,DNS net
@@ -97,7 +96,6 @@ flowchart TB
     class DCR,LAW,AMETRIC,ALOG,AG,RSV mon
     class BUDGET gov
     class EMAIL notify
-    class APP planned
 
     style ENTRA fill:#2a1a5e,stroke:#7e57c2
     style RGN fill:#0b1f3a,stroke:#1565c0
@@ -122,7 +120,7 @@ flowchart TB
 | 3 | [03-vm-rbac](03-vm-rbac/) | VM, custom RBAC role, tag policy, encryption, budget alert | ✅ |
 | 4 | [04-monitoring-backup](04-monitoring-backup/) | Alerts, Log Analytics, KQL, VM backup and restore | ✅ |
 | 5 | [05-entra-ca-pim](05-entra-ca-pim/) | Conditional Access, PIM, access review, sign-in logs | ✅ |
-| 6 | [06-app-service](06-app-service/) | Slots, zero-downtime swap, autoscale, backup | ⬜ |
+| 6 | [06-app-service](06-app-service/) | Slots, zero-downtime swap, autoscale, backup | ✅ |
 
 ## Project Summaries
 
@@ -158,11 +156,11 @@ flowchart TB
 - Sign-in log check
 
 ### 06 – App Service
-- S1 plan with production and staging slots
-- App deployed from GitHub ([web app repo](https://github.com/your-username/your-webapp-repo))
-- Slot swap with zero downtime
-- CPU-based and scheduled autoscale rules
-- Backup with retention policy
+- Premium V3 P0V3 plan with production and staging slots
+- Node.js app deployed from GitHub ([az104-webapp](https://github.com/tttaufiqqq/az104-webapp))
+- Slot swap with zero downtime, sticky `SLOT_LABEL` vs swapping `APP_MESSAGE`
+- CPU-based autoscale rules
+- Daily custom backup with 7-day retention
 
 ## How the Projects Connect
 
@@ -170,7 +168,7 @@ flowchart TB
 - The VM from step 3 sits in the network from step 2
 - Step 4 monitors and backs up that VM
 - PIM and access reviews in step 5 apply to the same groups and roles
-- App Service diagnostics and alerts reuse the step 4 workspace and action group
+- The step 6 App Service deploys from [az104-webapp](https://github.com/tttaufiqqq/az104-webapp) and reuses the step 4 workspace and action group for diagnostics and alerts
 - `templates/` rebuilds the combined environment
 
 ## Repository Structure
@@ -190,17 +188,6 @@ azure-az104-lab/
 - Each project folder has a `README.md` and a `screenshots/` folder
 - Each project README covers what was built, steps, and proof screenshots
 
-## Original Project Mapping
-
-| Folder | Original project |
-|---|---|
-| 01-entra-users-groups | 4 (part 1) |
-| 02-network-storage | 2 |
-| 03-vm-rbac | 1 |
-| 04-monitoring-backup | 3 |
-| 05-entra-ca-pim | 4 (part 2) |
-| 06-app-service | 5 |
-
 ## Skills Demonstrated
 
 - Entra ID, RBAC, Conditional Access, PIM, access reviews
@@ -214,7 +201,7 @@ azure-az104-lab/
 ## Notes
 
 - Entra P2 trial needed for PIM and access reviews (started at step 5)
-- App Service slots, autoscale, and backup need Standard (S1) or higher
+- App Service slots, autoscale, and backup need Standard or higher (here Premium V3 P0V3; Standard S1 was not offered)
 - Resources deleted after each project to control cost
 - Subscription IDs, tenant IDs, emails, and public IPs redacted in screenshots
 - No secrets committed to the repo

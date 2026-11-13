@@ -154,7 +154,7 @@ Three files, no `npm install`:
 
 ## Troubleshooting
 - **GitHub OIDC deployment failed.** The portal generated an OIDC workflow, but the deployment failed with a token verification error. Fix: turned on SCM Basic Auth Publishing Credentials in Configuration > General settings and switched Deployment Center to use Basic authentication.
-- **Staging slot workflow failed on first run.** The Azure login step failed, then succeeded on a retry. The exact fix was not identified; the slot worked afterwards.
+- **Staging slot workflow failed on first run.** The Azure login step failed on the first run. Fix: turned on SCM Basic Auth Publishing Credentials in Configuration > General settings and switched the slot's Deployment Center to Basic authentication; the workflow succeeded afterwards.
 - **`WEBSITE_SLOT_NAME` not set.** `printenv` via SSH confirmed the platform variable was absent on this Linux app. `server.js` was updated to derive the slot name from `WEBSITE_HOSTNAME` instead.
 - **First push rejected.** Azure had added a workflow file to `main` on GitHub. Fix: `git pull --rebase` before pushing.
 

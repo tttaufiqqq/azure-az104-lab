@@ -10,99 +10,7 @@ Hands-on Azure administration lab built as one connected environment, not six se
 
 ## Architecture
 
-Dashed edges are planned.
-
-```mermaid
-%%{init: {"theme": "dark"}}%%
-flowchart TB
-    subgraph ENTRA["Microsoft Entra ID"]
-        USERS["Users<br/>lab.vmadmin, lab.webdev, lab.reader<br/>lab.admin - approver and reviewer"]
-        GROUPS["Security groups<br/>grp-vm-operators<br/>grp-webapp-contributors<br/>grp-lab-readers"]
-        CA["Conditional Access, MFA<br/>CA-require-mfa-azure-mgmt"]
-        PIM["PIM and access reviews<br/>AR-grp-vm-operators-quarterly"]
-        USERS --> GROUPS
-    end
-
-    subgraph SUB["Azure subscription - Malaysia West"]
-        BUDGET["Budget<br/>budget-lab-monthly<br/>scoped to the billing account"]
-
-        subgraph RGN["rg-lab-network"]
-            subgraph VNET["vnet-lab 10.0.0.0/16"]
-                SNET1["snet-resources<br/>10.0.1.0/24<br/>nsg-resources"]
-                SNET2["snet-privateendpoints<br/>10.0.2.0/24"]
-            end
-            PE["Private endpoint<br/>pe-stlablab-blob<br/>IP 10.0.2.4"]
-            DNS["Private DNS zone<br/>privatelink.blob.core.windows.net"]
-            STORAGE["Storage account stlablab<br/>public access disabled"]
-        end
-
-        subgraph RGV["rg-lab-vm"]
-            POLICY["Azure Policy<br/>require-env-tag"]
-            VM["vm-lab-01<br/>Ubuntu 24.04 + data disk"]
-            KV["Key Vault<br/>kv-lab-03"]
-            DCR["Data collection rule<br/>dcr-lab-vm"]
-            LAW["Log Analytics<br/>law-lab"]
-            AMETRIC["Metric alert<br/>CPU above 70 percent"]
-            ALOG["Log alert<br/>failed SSH logins"]
-            AG["Action group<br/>ag-lab-email"]
-            RSV["Recovery Services vault<br/>rsv-lab"]
-        end
-
-        APP["App Service asp-lab / app-lab-1612<br/>slots, autoscale, backup"]
-    end
-
-    EMAIL["Email notification"]
-
-    GROUPS -->|"custom role VM Operator Custom"| VM
-    CA -->|"MFA for Azure management"| GROUPS
-    PIM -->|"eligible roles, reviews"| GROUPS
-    GROUPS -.->|"Website Contributor"| APP
-
-    VM -->|"NIC"| SNET1
-    VM -.->|"resolves stlablab to 10.0.2.4"| DNS
-    DNS -.->|"linked to"| VNET
-    PE --- SNET2
-    PE -->|"registers A record"| DNS
-    PE -->|"private link"| STORAGE
-
-    VM -->|"encrypts data disk"| KV
-    VM -->|"Azure Monitor Agent"| DCR
-    DCR -->|"Perf and Syslog"| LAW
-    LAW --> ALOG
-    VM -->|"platform metrics"| AMETRIC
-    AMETRIC --> AG
-    ALOG --> AG
-    AG --> EMAIL
-
-    VM -->|"daily backup"| RSV
-    RSV -->|"reads keys and secrets"| KV
-    POLICY -.->|"requires env tag"| VM
-    APP -.->|"diagnostics"| LAW
-
-    classDef ident fill:#4527a0,stroke:#b39ddb,color:#ffffff,stroke-width:2px
-    classDef net fill:#0d47a1,stroke:#90caf9,color:#ffffff,stroke-width:2px
-    classDef storage fill:#e65100,stroke:#ffb74d,color:#ffffff,stroke-width:2px
-    classDef compute fill:#1b5e20,stroke:#a5d6a7,color:#ffffff,stroke-width:2px
-    classDef sec fill:#b71c1c,stroke:#ef9a9a,color:#ffffff,stroke-width:2px
-    classDef mon fill:#006064,stroke:#80deea,color:#ffffff,stroke-width:2px
-    classDef gov fill:#37474f,stroke:#b0bec5,color:#ffffff,stroke-width:2px
-    classDef notify fill:#ad1457,stroke:#f48fb1,color:#ffffff,stroke-width:2px
-
-    class USERS,GROUPS,CA,PIM ident
-    class SNET1,SNET2,PE,DNS net
-    class STORAGE storage
-    class VM compute
-    class KV,POLICY sec
-    class DCR,LAW,AMETRIC,ALOG,AG,RSV mon
-    class BUDGET gov
-    class EMAIL notify
-
-    style ENTRA fill:#2a1a5e,stroke:#7e57c2
-    style RGN fill:#0b1f3a,stroke:#1565c0
-    style VNET fill:#0e2a4f,stroke:#1e88e5
-    style RGV fill:#12321d,stroke:#2e7d32
-    style SUB fill:#101418,stroke:#546e7a
-```
+![Architecture diagram](docs/architecture.png)
 
 - **Identity:** Entra ID users and groups drive RBAC across every project
 - **Network:** one VNet with a resource subnet, a private endpoint subnet, and an NSG
@@ -176,6 +84,8 @@ flowchart TB
 ```
 azure-az104-lab/
 ├── README.md
+├── docs/
+│   └── architecture.png
 ├── 01-entra-users-groups/
 ├── 02-network-storage/
 ├── 03-vm-rbac/

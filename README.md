@@ -1,6 +1,6 @@
 # Azure AZ-104 Lab
 
-Hands-on Azure administration lab built as one connected environment, not six separate demos. Each project reuses what the previous one created, and the full setup can be redeployed from a single template.
+Hands-on Azure administration lab built as one connected environment, not six separate demos. Each project reuses what the previous one created, and every step is documented with screenshots.
 
 ## Goals
 
@@ -16,7 +16,7 @@ Dashed edges are planned.
 %%{init: {"theme": "dark"}}%%
 flowchart TB
     subgraph ENTRA["Microsoft Entra ID"]
-        USERS["Users<br/>lab.vmadmin, lab.webdev, lab.reader"]
+        USERS["Users<br/>lab.vmadmin, lab.webdev, lab.reader<br/>lab.admin - approver and reviewer"]
         GROUPS["Security groups<br/>grp-vm-operators<br/>grp-webapp-contributors<br/>grp-lab-readers"]
         CA["Conditional Access, MFA<br/>CA-require-mfa-azure-mgmt"]
         PIM["PIM and access reviews<br/>AR-grp-vm-operators-quarterly"]
@@ -120,7 +120,7 @@ flowchart TB
 | 3 | [03-vm-rbac](03-vm-rbac/) | VM, custom RBAC role, tag policy, encryption, budget alert | ✅ |
 | 4 | [04-monitoring-backup](04-monitoring-backup/) | Alerts, Log Analytics, KQL, VM backup and restore | ✅ |
 | 5 | [05-entra-ca-pim](05-entra-ca-pim/) | Conditional Access, PIM, access review, sign-in logs | ✅ |
-| 6 | [06-app-service](06-app-service/) | Slots, zero-downtime swap, autoscale, backup | ✅ |
+| 6 | [06-app-service](06-app-service/) | Slots, warm-up swap, autoscale, backup | ✅ |
 
 ## Project Summaries
 
@@ -158,18 +158,18 @@ flowchart TB
 ### 06 – App Service
 - Premium V3 P0V3 plan with production and staging slots
 - Node.js app deployed from GitHub ([az104-webapp](https://github.com/tttaufiqqq/az104-webapp))
-- Slot swap with zero downtime, sticky `SLOT_LABEL` vs swapping `APP_MESSAGE`
+- Slot swap with warm-up, sticky `SLOT_LABEL` vs swapping `APP_MESSAGE`
 - CPU-based autoscale rules
 - Daily custom backup with 7-day retention
 
 ## How the Projects Connect
 
-- Entra groups from step 1 receive roles in steps 3 and 6
+- The VM operators group from step 1 receives the custom RBAC role in step 3
 - The VM from step 3 sits in the network from step 2
 - Step 4 monitors and backs up that VM
-- PIM and access reviews in step 5 apply to the same groups and roles
-- The step 6 App Service deploys from [az104-webapp](https://github.com/tttaufiqqq/az104-webapp) and reuses the step 4 workspace and action group for diagnostics and alerts
-- `templates/` rebuilds the combined environment
+- PIM in step 5 makes `lab.webdev` eligible for the Security Reader role; the access review applies to `grp-vm-operators`
+- The step 6 App Service deploys from [az104-webapp](https://github.com/tttaufiqqq/az104-webapp)
+- `02-network-storage/template.json` redeploys the network and storage
 
 ## Repository Structure
 
@@ -181,8 +181,7 @@ azure-az104-lab/
 ├── 03-vm-rbac/
 ├── 04-monitoring-backup/
 ├── 05-entra-ca-pim/
-├── 06-app-service/
-└── templates/
+└── 06-app-service/
 ```
 
 - Each project folder has a `README.md` and a `screenshots/` folder

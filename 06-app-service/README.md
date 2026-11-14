@@ -1,19 +1,19 @@
 # 06 – App Service and Autoscaling
 
-Linux App Service with deployment slots, a zero-downtime swap, autoscale rules, and scheduled backup. The web app is a minimal Node.js server in a separate repo that shows version, slot, and setting values on a coloured page.
+Linux App Service with deployment slots, a warm-up swap, autoscale rules, and scheduled backup. The web app is a minimal Node.js server in a separate repo that shows version, slot, and setting values on a coloured page.
 
 ## What I built
 - App Service plan `asp-lab`: Premium V3 P0V3, Linux, Malaysia West
 - Web app `app-lab-1612`: Node 22 LTS, deployed from GitHub
 - Deployment slot `staging`, cloned from production
 - Slot settings demo with `SLOT_LABEL` (sticky) and `APP_MESSAGE` (swaps)
-- Zero-downtime slot swap: staging ⇄ production
+- Warm-up slot swap: staging ⇄ production
 - Autoscale setting `autoscale-asp-lab` on `asp-lab`
 - Scheduled daily backup with 7-day retention, storage account `stlabappbackup` in `rg-lab-app`
 - Web app repo: [az104-webapp](https://github.com/tttaufiqqq/az104-webapp)
 
 ## Plan note
-The portal no longer listed Standard S1 as an option. Basic has no deployment slots. Premium V3 P0V3 (about USD 0.08/hr) was the smallest plan that supports slots, autoscale, and backup on this subscription. A larger P1MV3 failed subscription validation on the free trial.
+The portal no longer listed Standard S1 as an option. Basic has no deployment slots. Premium V3 P0V3 (about USD 0.08/hr) was the smallest plan that supports slots, autoscale, and backup on this subscription. A larger P1MV3 failed preflight validation.
 
 ## Steps
 1. Created `rg-lab-app`, the plan, and the web app
@@ -133,15 +133,16 @@ Three files, no `npm install`:
 
 **After the swap:** production = `v2` green, `SLOT_LABEL` still `production`, `APP_MESSAGE` now `from staging`. Staging = `v1` blue, `SLOT_LABEL` still `staging`, `APP_MESSAGE` now `from production`.
 
-**Two things worth noting:**
-- The platform row (`WEBSITE_SLOT_NAME`) showed `staging` on the swapped production page. The swap moved an already-running process, and the platform variable was not refreshed. The app reads `WEBSITE_HOSTNAME` at start for the slot display, so a restart would correct it.
+**Three things worth noting:**
+- The platform row showed `staging` on the swapped production page. That row comes from `WEBSITE_HOSTNAME`, captured when the process started, and the swap moved the already-running process, so the value was not refreshed (`WEBSITE_SLOT_NAME` is absent on this Linux app). A restart would likely correct it.
 - Deployment slots do not change which Git branch each slot tracks. After the swap, a push to `main` would redeploy `v1` over the swapped `v2`.
+- Both slots reported the same instance ID (`21a15b1d`) because slots share the plan's instance.
 
 ## Autoscale
 - Setting name `autoscale-asp-lab`, on `asp-lab`
 - Instance limits: minimum 1, maximum 2, default 1
-- **Scale-out:** average CPU > 70% over 10 minutes ⇄ add 1 instance, cool down 5 minutes
-- **Scale-in:** average CPU < 30% ⇄ remove 1 instance
+- **Scale-out:** average CPU > 70% over 10 minutes, then add 1 instance, cool down 5 minutes
+- **Scale-in:** average CPU < 30% over 10 minutes, then remove 1 instance, cool down 5 minutes
 - Metric-based only; no scheduled condition was configured
 
 ## Backup
@@ -149,12 +150,12 @@ Three files, no `npm install`:
 - **Custom backup:** configured daily with 7-day retention, stored in `stlabappbackup` / `appbackups` container
 - Both appear in the same list on the Backups page
 - Backup is per slot; production backup after the swap contains v2
-- Backup needs Standard or higher (here Premium V3 P0V3)
+- Backup needs Standard or higher for custom backups (here Premium V3 P0V3); built-in automatic backups run hourly on all tiers
 - Keep at least one backup is ticked; retention is 7 days
 
 ## Troubleshooting
 - **GitHub OIDC deployment failed.** The portal generated an OIDC workflow, but the deployment failed with a token verification error. Fix: turned on SCM Basic Auth Publishing Credentials in Configuration > General settings and switched Deployment Center to use Basic authentication.
-- **Staging slot workflow failed on first run.** The Azure login step failed on the first run. Fix: turned on SCM Basic Auth Publishing Credentials in Configuration > General settings and switched the slot's Deployment Center to Basic authentication; the workflow succeeded afterwards.
+- **Staging slot workflow failed on first run.** The Azure login step failed on the first run. The switch to Basic authentication (SCM Basic Auth Publishing Credentials) is the likely fix; the exact attempt that resolved it was not captured.
 - **`WEBSITE_SLOT_NAME` not set.** `printenv` via SSH confirmed the platform variable was absent on this Linux app. `server.js` was updated to derive the slot name from `WEBSITE_HOSTNAME` instead.
 - **First push rejected.** Azure had added a workflow file to `main` on GitHub. Fix: `git pull --rebase` before pushing.
 
@@ -164,4 +165,4 @@ Three files, no `npm install`:
 - **The exam question:** "what happens to sticky settings on a swap?" - they stay with the slot.
 - **Autoscale vs manual scale:** autoscale changes instance count automatically on rules; manual scale sets a fixed count.
 - **Backup limits:** one storage account per app, up to about 10 GB, same subscription.
-- **Deployment slots need Standard or higher.** Slots, autoscale, and backup are not available on Free or Basic.
+- **Deployment slots need Standard or higher.** Slots and autoscale are not available on Free or Basic; custom backups also need Standard or higher.

@@ -3,20 +3,32 @@
 Conditional Access with MFA, Privileged Identity Management with approval-based activation, and an access review on the lab groups.
 
 ## What I built
-- Entra ID P2 trial activated on the tenant
-- Conditional Access policy `CA-require-mfa-azure-mgmt` requiring MFA for Azure management
-- PIM: `lab.webdev` eligible for the Security Reader role, activation approved by `lab.admin`
-- Access review `AR-grp-vm-operators-quarterly` on `grp-vm-operators`, decided and completed
+- Security defaults disabled (required before Conditional Access can be used)
+- Entra ID P2 trial activated on the tenant (ends 12/8/2026)
+- Conditional Access policy `CA-require-mfa-azure-mgmt`, On:
+  - Users: includes `grp-vm-operators`; excludes `lab.admin` and the personal account
+  - Target: Azure management, shown as Azure Resource Manager (app ID `797f4846-ba00-4fd7-ba43-dac1f8f63013`)
+  - Grant: require MFA
+- PIM Security Reader role:
+  - `lab.webdev` eligible until 1/1/2027
+  - Activation maximum 1 hour, justification required
+  - Approval required, approver `lab.admin`
+  - "On activation, require" left as None
+- Access review `AR-grp-vm-operators-quarterly` on `grp-vm-operators`:
+  - Quarterly, 3-day duration, 2 occurrences
+  - Auto-apply enabled, "No change" if reviewers don't respond
+  - Reviewer decision: Approve `lab.vmadmin`
 - Sign-in logs checked for the MFA-challenged sign-in
 
 ## Steps
-1. Started the Entra ID P2 trial and assigned licenses
-2. Created the Conditional Access policy and tested it by signing in as `lab.vmadmin`
-3. Checked the sign-in logs
-4. Made `lab.webdev` eligible for Security Reader in PIM
-5. Requested activation as `lab.webdev`, approved it as `lab.admin`
-6. Created the quarterly access review on `grp-vm-operators`
-7. Completed the review decision in My Access and verified the result
+1. Disabled security defaults
+2. Started the Entra ID P2 trial and assigned licenses
+3. Created the Conditional Access policy and tested it by signing in as `lab.vmadmin`
+4. Checked the sign-in logs
+5. Configured the PIM Security Reader role and made `lab.webdev` eligible
+6. Requested activation as `lab.webdev`, approved it as `lab.admin`
+7. Created the quarterly access review on `grp-vm-operators`
+8. Submitted the review decision (Approve) in My Access and checked the review status
 
 ## Evidence
 ![Licenses: all products](screenshots/01-entra-licenses-products.png)
@@ -85,8 +97,8 @@ PIM My roles as `lab.webdev`.
 ![Activation scheduled](screenshots/22-pim-activation-scheduled.png)
 Activation request scheduled: `lab.webdev`, Security Reader, Default Directory.
 
-![Navigate access reviews](screenshots/23-navigate-access-reviews.png)
-Navigating to access reviews in Identity Governance.
+![Entra navigation](screenshots/23-entra-navigation.png)
+Entra admin center navigation after scheduling the activation.
 
 ![PIM approve request](screenshots/24-pim-approve-request.png)
 PIM Approve requests; `lab.admin` approves the activation.
@@ -119,18 +131,28 @@ My Access shows the review due Nov 11, 2026.
 Review decision: Approve `lab.vmadmin` in `grp-vm-operators`.
 
 ![Access review completed](screenshots/34-access-review-completed.png)
-Access review progress: Completed.
+My Access shows the reviewer's progress as Completed; the review itself stays Active.
 
 ![Access review overview](screenshots/35-access-review-overview.png)
-Review overview: 1 user reviewed.
+Review overview: still Active, 1 user approved.
 
 ![Group members after review](screenshots/36-group-members-after-review.png)
 `grp-vm-operators` members after the review.
 
+## Troubleshooting
+- **Consumer account blocked (error 100014):** the personal Gmail account is an external user and cannot manage the tenant. `lab.admin` is a native Global Administrator created for the admin work (screenshots 02 and 03).
+- **P2 trial checkout:** the SST (sales and service tax) ID box was left unticked and empty at checkout.
+- **PIM navigation:** PIM for Microsoft Entra roles is reached through search; "Azure resources" opens the wrong PIM side.
+- **Shared incognito session:** admin and test accounts share one incognito browser session, so sign out and back in carefully between roles.
+- **Approver without mailbox:** `lab.admin` has no mailbox, so activation approvals are completed in the portal, not by email.
+
 ## Exam notes
 - Conditional Access policies are evaluated on every sign-in: signals, conditions, then grant (MFA) or block
+- Conditional Access needs Entra ID P1
+- Security defaults and Conditional Access cannot coexist; disabling security defaults is a prerequisite
 - MFA registration and the Authenticator app approval flow are part of the same MFA grant
 - PIM separates eligible from active: activation needs approval when an approver is configured
+- PIM approvers are configured per role
 - PIM activation is time-bound and ends automatically
 - Access reviews run on groups or apps; reviewers decide Approve/Deny in My Access
 - Sign-in logs show the CA policy and MFA outcome per sign-in
@@ -138,4 +160,3 @@ Review overview: 1 user reviewed.
 
 ## Used later
 - `grp-vm-operators` keeps its VM access after the access review
-- 06 reuses the same identity model for App Service role assignment

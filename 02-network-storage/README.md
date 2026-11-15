@@ -73,4 +73,4 @@ Access from outside the VNet is not authorized.
 - NSGs attach to subnets or NICs; with both, inbound traffic is checked at the subnet first
 
 ## Redeploying
-`template.json` is an exported template. Replace `YOUR_PUBLIC_IP` in the RDP rule with your own IP before deploying.
+`template.json` is an exported template. Replace `YOUR_PUBLIC_IP` with your own IP before deploying: it appears in both the RDP rule source (priority 100) and the SSH rule source (priority 110).

@@ -8,7 +8,7 @@ Monitoring, alerting, and backup for `vm-lab-01`, using one Log Analytics worksp
 - Action group `ag-lab-email`
 - Metric alert `alert-vm-cpu-high` (average CPU above 70%)
 - Log alert `alert-ssh-failed-login` (KQL on failed SSH logins)
-- KQL queries for syslog, failed logins, and performance data
+- KQL queries for heartbeat, failed logins, and CPU trend
 - Recovery Services vault `rsv-lab`, policy `bp-lab-daily`, a completed backup, and a disk restore
 
 ## Steps

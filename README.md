@@ -17,7 +17,7 @@ Hands-on Azure administration lab built as one connected environment, not six se
 - **Compute:** a VM in the resource subnet, plus an App Service with slots
 - **Storage:** `stlablab` with public access disabled, reachable only through `pe-stlablab-blob` at 10.0.2.4
 - **Operations:** one Log Analytics workspace, shared alerts, Recovery Services vault
-- **Governance:** tag policy and budget alert scoped to the billing account
+- **Governance:** tag policy and budget alert scoped to the subscription
 
 ## Build Order
 

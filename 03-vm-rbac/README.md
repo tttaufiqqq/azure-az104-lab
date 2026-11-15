@@ -57,7 +57,7 @@ IAM on the VM: group assigned the custom role at VM scope.
 Deletion failure notification.
 
 ![lsblk before encryption](screenshots/13-lsblk-before-encryption.png)
-OS disk `sda` and data disk `sdb` with its partitions.
+Data disk `sda` (4 GiB) and OS disk `sdb` (30 GiB) with its partitions.
 
 ![Format and mount](screenshots/14-format-mount-disk.png)
 `parted`, `mkfs.ext4`, and `mount` on the data disk.
@@ -89,7 +89,7 @@ Data partition shows `crypto_LUKS`; BEK volume holds the unlock key.
 - Encrypted the data disk only: Linux OS disk encryption needs more memory than a 4 GiB VM has
 - Data disk added to `/etc/fstab` with `nofail` before encryption
 - ADE retires on 15 September 2028; encryption at host is the replacement
-- Budget scope is the billing account; alerts only notify and do not stop spending
+- Budget scope is the subscription; alerts only notify and do not stop spending
 - VM and its NIC, public IP, and disks sit in different resource groups from the VNet
 
 ## Exam notes

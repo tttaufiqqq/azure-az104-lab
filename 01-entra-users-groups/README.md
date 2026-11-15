@@ -18,6 +18,7 @@ Test identities and security groups used for RBAC, PIM, and access reviews in la
 3. Created the three security groups
 4. Added each user to its group
 5. Verified membership
+6. Signed in as a test user to verify the account works
 
 ## Evidence
 ![Create user](screenshots/01-create-users.png)
@@ -49,5 +50,5 @@ All three security groups created.
 
 ## Used later
 - 03: custom RBAC role for `grp-vm-operators`
-- 05: PIM eligibility and access reviews on these groups
+- 05: PIM eligibility and access reviews on these groups; `lab.admin` needed for PIM approvals and the P2 trial
 - 06: Website Contributor role for `grp-webapp-contributors`

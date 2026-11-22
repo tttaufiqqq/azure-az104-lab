@@ -2,7 +2,7 @@
 
 Conditional Access with MFA, Privileged Identity Management with approval-based activation, and an access review on the lab groups.
 
-## What I built
+## 1. What I built
 - Security defaults disabled (required before Conditional Access can be used)
 - Entra ID P2 trial activated on the tenant (ends 12/8/2026)
 - Conditional Access policy `CA-require-mfa-azure-mgmt`, On:
@@ -20,7 +20,7 @@ Conditional Access with MFA, Privileged Identity Management with approval-based 
   - Reviewer decision: Approve `lab.vmadmin`
 - Sign-in logs checked for the MFA-challenged sign-in
 
-## Steps
+## 2. Steps
 1. Disabled security defaults
 2. Started the Entra ID P2 trial and assigned licenses
 3. Created the Conditional Access policy and tested it by signing in as `lab.vmadmin`
@@ -30,123 +30,123 @@ Conditional Access with MFA, Privileged Identity Management with approval-based 
 7. Created the quarterly access review on `grp-vm-operators`
 8. Submitted the review decision (Approve) in My Access and checked the review status
 
-## Evidence
-![Licenses: all products](screenshots/01-entra-licenses-products.png)
-Licenses > All products in the Entra admin center; Try/Buy options available.
+## 3. Evidence
+<img src="screenshots/01-entra-licenses-products.png" alt="Licenses: all products" style="border: 1px solid #d0d7de; border-radius: 6px;">
+*Licenses > All products in the Entra admin center; Try/Buy options available.*
 
-![M365 admin error](screenshots/02-m365-admin-error.png)
-Microsoft 365 admin center rejects the consumer account: `UnAuth` (error 100014).
+<img src="screenshots/02-m365-admin-error.png" alt="M365 admin error" style="border: 1px solid #d0d7de; border-radius: 6px;">
+*Microsoft 365 admin center rejects the consumer account: `UnAuth` (error 100014).*
 
-![M365 admin home](screenshots/03-m365-admin-home.png)
-Microsoft 365 admin center homepage signed in as `Lab.Admin`.
+<img src="screenshots/03-m365-admin-home.png" alt="M365 admin home" style="border: 1px solid #d0d7de; border-radius: 6px;">
+*Microsoft 365 admin center homepage signed in as `Lab.Admin`.*
 
-![Licenses menu](screenshots/04-entra-licenses-menu.png)
-Licenses blade in the Entra admin center.
+<img src="screenshots/04-entra-licenses-menu.png" alt="Licenses menu" style="border: 1px solid #d0d7de; border-radius: 6px;">
+*Licenses blade in the Entra admin center.*
 
-![Licenses trial](screenshots/05-licenses-trial.png)
-Licenses page with the Entra ID P2 trial on the tenant.
+<img src="screenshots/05-licenses-trial.png" alt="Licenses trial" style="border: 1px solid #d0d7de; border-radius: 6px;">
+*Licenses page with the Entra ID P2 trial on the tenant.*
 
-![Assign license to users](screenshots/06-assign-license-users.png)
-Active users in the Microsoft 365 admin center for license assignment.
+<img src="screenshots/06-assign-license-users.png" alt="Assign license to users" style="border: 1px solid #d0d7de; border-radius: 6px;">
+*Active users in the Microsoft 365 admin center for license assignment.*
 
-![Entra overview](screenshots/07-entra-overview.png)
-Entra admin center overview.
+<img src="screenshots/07-entra-overview.png" alt="Entra overview" style="border: 1px solid #d0d7de; border-radius: 6px;">
+*Entra admin center overview.*
 
-![Entra overview menu](screenshots/08-entra-overview-menu.png)
-Entra admin center navigation before creating the policy.
+<img src="screenshots/08-entra-overview-menu.png" alt="Entra overview menu" style="border: 1px solid #d0d7de; border-radius: 6px;">
+*Entra admin center navigation before creating the policy.*
 
-![Create CA policy](screenshots/09-create-ca-policy.png)
-New Conditional Access policy `CA-require-mfa-azure-mgmt`.
+<img src="screenshots/09-create-ca-policy.png" alt="Create CA policy" style="border: 1px solid #d0d7de; border-radius: 6px;">
+*New Conditional Access policy `CA-require-mfa-azure-mgmt`.*
 
-![CA policy assignments](screenshots/10-ca-policy-assignments.png)
-Policy assignments: users and target resources.
+<img src="screenshots/10-ca-policy-assignments.png" alt="CA policy assignments" style="border: 1px solid #d0d7de; border-radius: 6px;">
+*Policy assignments: users and target resources.*
 
-![CA policy config](screenshots/11-ca-policy-config.png)
-Conditional Access policy creation page.
+<img src="screenshots/11-ca-policy-config.png" alt="CA policy config" style="border: 1px solid #d0d7de; border-radius: 6px;">
+*Conditional Access policy creation page.*
 
-![Entra menu](screenshots/12-entra-menu.png)
-Entra admin center menu with Conditional Access.
+<img src="screenshots/12-entra-menu.png" alt="Entra menu" style="border: 1px solid #d0d7de; border-radius: 6px;">
+*Entra admin center menu with Conditional Access.*
 
-![CA policies list](screenshots/13-ca-policies-list.png)
-Conditional Access policies list showing the new policy.
+<img src="screenshots/13-ca-policies-list.png" alt="CA policies list" style="border: 1px solid #d0d7de; border-radius: 6px;">
+*Conditional Access policies list showing the new policy.*
 
-![MFA prompt](screenshots/14-mfa-authenticator-prompt.png)
-Sign-in as `lab.vmadmin` requires Microsoft Authenticator approval.
+<img src="screenshots/14-mfa-authenticator-prompt.png" alt="MFA prompt" style="border: 1px solid #d0d7de; border-radius: 6px;">
+*Sign-in as `lab.vmadmin` requires Microsoft Authenticator approval.*
 
-![CA overview after MFA](screenshots/15-ca-overview-after-mfa.png)
-Conditional Access overview after the MFA test.
+<img src="screenshots/15-ca-overview-after-mfa.png" alt="CA overview after MFA" style="border: 1px solid #d0d7de; border-radius: 6px;">
+*Conditional Access overview after the MFA test.*
 
-![Sign-in logs](screenshots/16-sign-in-logs.png)
-Sign-in logs showing the MFA-challenged sign-in.
+<img src="screenshots/16-sign-in-logs.png" alt="Sign-in logs" style="border: 1px solid #d0d7de; border-radius: 6px;">
+*Sign-in logs showing the MFA-challenged sign-in.*
 
-![PIM menu](screenshots/17-pim-menu.png)
-Privileged Identity Management section of the Entra admin center.
+<img src="screenshots/17-pim-menu.png" alt="PIM menu" style="border: 1px solid #d0d7de; border-radius: 6px;">
+*Privileged Identity Management section of the Entra admin center.*
 
-![PIM menu roles](screenshots/18-pim-menu-roles.png)
-PIM roles section in the Entra admin center.
+<img src="screenshots/18-pim-menu-roles.png" alt="PIM menu roles" style="border: 1px solid #d0d7de; border-radius: 6px;">
+*PIM roles section in the Entra admin center.*
 
-![PIM Entra roles overview](screenshots/19-pim-entra-roles-overview.png)
-PIM Microsoft Entra roles overview.
+<img src="screenshots/19-pim-entra-roles-overview.png" alt="PIM Entra roles overview" style="border: 1px solid #d0d7de; border-radius: 6px;">
+*PIM Microsoft Entra roles overview.*
 
-![PIM Security Reader assignment](screenshots/20-pim-security-reader-assignment.png)
-Security Reader role assignments; `lab.webdev` added as eligible.
+<img src="screenshots/20-pim-security-reader-assignment.png" alt="PIM Security Reader assignment" style="border: 1px solid #d0d7de; border-radius: 6px;">
+*Security Reader role assignments; `lab.webdev` added as eligible.*
 
-![PIM My roles](screenshots/21-pim-my-roles.png)
-PIM My roles as `lab.webdev`.
+<img src="screenshots/21-pim-my-roles.png" alt="PIM My roles" style="border: 1px solid #d0d7de; border-radius: 6px;">
+*PIM My roles as `lab.webdev`.*
 
-![Activation scheduled](screenshots/22-pim-activation-scheduled.png)
-Activation request scheduled: `lab.webdev`, Security Reader, Default Directory.
+<img src="screenshots/22-pim-activation-scheduled.png" alt="Activation scheduled" style="border: 1px solid #d0d7de; border-radius: 6px;">
+*Activation request scheduled: `lab.webdev`, Security Reader, Default Directory.*
 
-![Entra navigation](screenshots/23-entra-navigation.png)
-Entra admin center navigation after scheduling the activation.
+<img src="screenshots/23-entra-navigation.png" alt="Entra navigation" style="border: 1px solid #d0d7de; border-radius: 6px;">
+*Entra admin center navigation after scheduling the activation.*
 
-![PIM approve request](screenshots/24-pim-approve-request.png)
-PIM Approve requests; `lab.admin` approves the activation.
+<img src="screenshots/24-pim-approve-request.png" alt="PIM approve request" style="border: 1px solid #d0d7de; border-radius: 6px;">
+*PIM Approve requests; `lab.admin` approves the activation.*
 
-![PIM My roles active](screenshots/25-pim-my-roles-active.png)
-My roles showing the Security Reader activation.
+<img src="screenshots/25-pim-my-roles-active.png" alt="PIM My roles active" style="border: 1px solid #d0d7de; border-radius: 6px;">
+*My roles showing the Security Reader activation.*
 
-![Create access review basics](screenshots/26-create-access-review-basics.png)
-New access review: name and review type.
+<img src="screenshots/26-create-access-review-basics.png" alt="Create access review basics" style="border: 1px solid #d0d7de; border-radius: 6px;">
+*New access review: name and review type.*
 
-![Create access review scope](screenshots/27-create-access-review-scope.png)
-Access review scope: group and app membership.
+<img src="screenshots/27-create-access-review-scope.png" alt="Create access review scope" style="border: 1px solid #d0d7de; border-radius: 6px;">
+*Access review scope: group and app membership.*
 
-![Create access review reviewers](screenshots/28-create-access-review-reviewers.png)
-Access review reviewers configuration.
+<img src="screenshots/28-create-access-review-reviewers.png" alt="Create access review reviewers" style="border: 1px solid #d0d7de; border-radius: 6px;">
+*Access review reviewers configuration.*
 
-![Create access review settings](screenshots/29-create-access-review-settings.png)
-Access review settings: schedule and recurrence.
+<img src="screenshots/29-create-access-review-settings.png" alt="Create access review settings" style="border: 1px solid #d0d7de; border-radius: 6px;">
+*Access review settings: schedule and recurrence.*
 
-![Access reviews dashboard](screenshots/30-access-reviews-dashboard.png)
-`AR-grp-vm-operators-quarterly` created in the access reviews dashboard.
+<img src="screenshots/30-access-reviews-dashboard.png" alt="Access reviews dashboard" style="border: 1px solid #d0d7de; border-radius: 6px;">
+*`AR-grp-vm-operators-quarterly` created in the access reviews dashboard.*
 
-![My Access overview](screenshots/31-my-access-overview.png)
-My Access overview for `lab.admin`: 1 active access review.
+<img src="screenshots/31-my-access-overview.png" alt="My Access overview" style="border: 1px solid #d0d7de; border-radius: 6px;">
+*My Access overview for `lab.admin`: 1 active access review.*
 
-![My Access reviews list](screenshots/32-my-access-reviews-list.png)
-My Access shows the review due Nov 11, 2026.
+<img src="screenshots/32-my-access-reviews-list.png" alt="My Access reviews list" style="border: 1px solid #d0d7de; border-radius: 6px;">
+*My Access shows the review due Nov 11, 2026.*
 
-![Access review decision](screenshots/33-access-review-decision.png)
-Review decision: Approve `lab.vmadmin` in `grp-vm-operators`.
+<img src="screenshots/33-access-review-decision.png" alt="Access review decision" style="border: 1px solid #d0d7de; border-radius: 6px;">
+*Review decision: Approve `lab.vmadmin` in `grp-vm-operators`.*
 
-![Access review completed](screenshots/34-access-review-completed.png)
-My Access shows the reviewer's progress as Completed; the review itself stays Active.
+<img src="screenshots/34-access-review-completed.png" alt="Access review completed" style="border: 1px solid #d0d7de; border-radius: 6px;">
+*My Access shows the reviewer's progress as Completed; the review itself stays Active.*
 
-![Access review overview](screenshots/35-access-review-overview.png)
-Review overview: still Active, 1 user approved.
+<img src="screenshots/35-access-review-overview.png" alt="Access review overview" style="border: 1px solid #d0d7de; border-radius: 6px;">
+*Review overview: still Active, 1 user approved.*
 
-![Group members after review](screenshots/36-group-members-after-review.png)
-`grp-vm-operators` members after the review.
+<img src="screenshots/36-group-members-after-review.png" alt="Group members after review" style="border: 1px solid #d0d7de; border-radius: 6px;">
+*`grp-vm-operators` members after the review.*
 
-## Troubleshooting
+## 4. Troubleshooting
 - **Consumer account blocked (error 100014):** the personal Gmail account is an external user and cannot manage the tenant. `lab.admin` is a native Global Administrator created for the admin work (screenshots 02 and 03).
 - **P2 trial checkout:** the SST (sales and service tax) ID box was left unticked and empty at checkout.
 - **PIM navigation:** PIM for Microsoft Entra roles is reached through search; "Azure resources" opens the wrong PIM side.
 - **Shared incognito session:** admin and test accounts share one incognito browser session, so sign out and back in carefully between roles.
 - **Approver without mailbox:** `lab.admin` has no mailbox, so activation approvals are completed in the portal, not by email.
 
-## Exam notes
+## 5. Exam notes
 - Conditional Access policies are evaluated on every sign-in: signals, conditions, then grant (MFA) or block
 - Conditional Access needs Entra ID P1
 - Security defaults and Conditional Access cannot coexist; disabling security defaults is a prerequisite
@@ -158,5 +158,5 @@ Review overview: still Active, 1 user approved.
 - Sign-in logs show the CA policy and MFA outcome per sign-in
 - PIM and access reviews need Entra ID P2
 
-## Used later
+## 6. Used later
 - `grp-vm-operators` keeps its VM access after the access review

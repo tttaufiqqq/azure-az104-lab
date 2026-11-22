@@ -2,7 +2,7 @@
 
 Linux App Service with deployment slots, a warm-up swap, autoscale rules, and scheduled backup. The web app is a minimal Node.js server in a separate repo that shows version, slot, and setting values on a coloured page.
 
-## What I built
+## 1. What I built
 - App Service plan `asp-lab`: Premium V3 P0V3, Linux, Malaysia West
 - Web app `app-lab-1612`: Node 22 LTS, deployed from GitHub
 - Deployment slot `staging`, cloned from production
@@ -12,10 +12,10 @@ Linux App Service with deployment slots, a warm-up swap, autoscale rules, and sc
 - Scheduled daily backup with 7-day retention, storage account `stlabappbackup` in `rg-lab-app`
 - Web app repo: [az104-webapp](https://github.com/tttaufiqqq/az104-webapp)
 
-## Plan note
+## 2. Plan note
 The portal no longer listed Standard S1 as an option. Basic has no deployment slots. Premium V3 P0V3 (about USD 0.08/hr) was the smallest plan that supports slots, autoscale, and backup on this subscription. A larger P1MV3 failed preflight validation.
 
-## Steps
+## 3. Steps
 1. Created `rg-lab-app`, the plan, and the web app
 2. Connected production to the GitHub repo (`main` branch) via Deployment Center
 3. Added app settings on production (`SLOT_LABEL` sticky, `APP_MESSAGE` ordinary)
@@ -24,95 +24,95 @@ The portal no longer listed Standard S1 as an option. Basic has no deployment sl
 6. Configured autoscale rules on the plan
 7. Configured the custom daily backup
 
-## Evidence
-![App Service plan](screenshots/01-asp-plan-overview.png)
-Plan `asp-lab` overview: CPU, memory, and data metrics.
+## 4. Evidence
+<img src="screenshots/01-asp-plan-overview.png" alt="App Service plan" style="border: 1px solid #d0d7de; border-radius: 6px;">
+*Plan `asp-lab` overview: CPU, memory, and data metrics.*
 
-![Create Web App](screenshots/02-create-web-app.png)
-Marketplace: Create Web App.
+<img src="screenshots/02-create-web-app.png" alt="Create Web App" style="border: 1px solid #d0d7de; border-radius: 6px;">
+*Marketplace: Create Web App.*
 
-![Create Web App basics](screenshots/03-create-web-app-basics.png)
-Web App creation wizard.
+<img src="screenshots/03-create-web-app-basics.png" alt="Create Web App basics" style="border: 1px solid #d0d7de; border-radius: 6px;">
+*Web App creation wizard.*
 
-![Web app overview](screenshots/04-web-app-overview.png)
-`app-lab-1612` overview after creation.
+<img src="screenshots/04-web-app-overview.png" alt="Web app overview" style="border: 1px solid #d0d7de; border-radius: 6px;">
+*`app-lab-1612` overview after creation.*
 
-![Deployment Center](screenshots/05-deployment-center.png)
-Deployment Center for the production app.
+<img src="screenshots/05-deployment-center.png" alt="Deployment Center" style="border: 1px solid #d0d7de; border-radius: 6px;">
+*Deployment Center for the production app.*
 
-![Configuration](screenshots/06-configuration.png)
-Configuration: stack settings, health check, FTPS.
+<img src="screenshots/06-configuration.png" alt="Configuration" style="border: 1px solid #d0d7de; border-radius: 6px;">
+*Configuration: stack settings, health check, FTPS.*
 
-![GitHub Actions workflow](screenshots/07-github-actions-workflow.png)
-Azure-generated workflow: build and deploy Node.js to `app-lab-1612`.
+<img src="screenshots/07-github-actions-workflow.png" alt="GitHub Actions workflow" style="border: 1px solid #d0d7de; border-radius: 6px;">
+*Azure-generated workflow: build and deploy Node.js to `app-lab-1612`.*
 
-![Production first visit](screenshots/08-production-v1-no-settings.png)
-Production before settings: v1, no slot label, no message.
+<img src="screenshots/08-production-v1-no-settings.png" alt="Production first visit" style="border: 1px solid #d0d7de; border-radius: 6px;">
+*Production before settings: v1, no slot label, no message.*
 
-![App settings](screenshots/09-app-settings-production.png)
-Environment variables: `APP_MESSAGE = from production`; `SLOT_LABEL` marked as deployment slot setting.
+<img src="screenshots/09-app-settings-production.png" alt="App settings" style="border: 1px solid #d0d7de; border-radius: 6px;">
+*Environment variables: `APP_MESSAGE = from production`; `SLOT_LABEL` marked as deployment slot setting.*
 
-![Production v1](screenshots/10-production-v1.png)
-Production before swap: v1, blue, with both settings applied.
+<img src="screenshots/10-production-v1.png" alt="Production v1" style="border: 1px solid #d0d7de; border-radius: 6px;">
+*Production before swap: v1, blue, with both settings applied.*
 
-![SSH console](screenshots/11-ssh-console.png)
-SSH web console on the Linux app.
+<img src="screenshots/11-ssh-console.png" alt="SSH console" style="border: 1px solid #d0d7de; border-radius: 6px;">
+*SSH web console on the Linux app.*
 
-![printenv](screenshots/12-printenv-slot-vars.png)
-`printenv | grep -i slot`: `APPSETTING_SLOT_LABEL=production`; `WEBSITE_SLOT_NAME` is absent.
+<img src="screenshots/12-printenv-slot-vars.png" alt="printenv" style="border: 1px solid #d0d7de; border-radius: 6px;">
+*`printenv | grep -i slot`: `APPSETTING_SLOT_LABEL=production`; `WEBSITE_SLOT_NAME` is absent.*
 
-![Git push rejected](screenshots/13-git-push-rejected.png)
-Push rejected: Azure had added a workflow file to `main`.
+<img src="screenshots/13-git-push-rejected.png" alt="Git push rejected" style="border: 1px solid #d0d7de; border-radius: 6px;">
+*Push rejected: Azure had added a workflow file to `main`.*
 
-![Production slot fixed](screenshots/14-production-v1-slot-fixed.png)
-After the `server.js` fix, the slot is derived from `WEBSITE_HOSTNAME`: Production.
+<img src="screenshots/14-production-v1-slot-fixed.png" alt="Production slot fixed" style="border: 1px solid #d0d7de; border-radius: 6px;">
+*After the `server.js` fix, the slot is derived from `WEBSITE_HOSTNAME`: Production.*
 
-![Staging commit](screenshots/15-git-staging-commit.png)
-Commit `staging v2` on the staging branch.
+<img src="screenshots/15-git-staging-commit.png" alt="Staging commit" style="border: 1px solid #d0d7de; border-radius: 6px;">
+*Commit `staging v2` on the staging branch.*
 
-![Staging Deployment Center](screenshots/16-staging-deployment-center.png)
-Deployment Center of the staging slot.
+<img src="screenshots/16-staging-deployment-center.png" alt="Staging Deployment Center" style="border: 1px solid #d0d7de; border-radius: 6px;">
+*Deployment Center of the staging slot.*
 
-![Push staging](screenshots/17-git-push-staging.png)
-Staging branch pushed to GitHub.
+<img src="screenshots/17-git-push-staging.png" alt="Push staging" style="border: 1px solid #d0d7de; border-radius: 6px;">
+*Staging branch pushed to GitHub.*
 
-![Staging deployment history](screenshots/18-staging-deployment-history.png)
-Staging slot deployment history.
+<img src="screenshots/18-staging-deployment-history.png" alt="Staging deployment history" style="border: 1px solid #d0d7de; border-radius: 6px;">
+*Staging slot deployment history.*
 
-![Staging v2](screenshots/19-staging-v2.png)
-Staging before swap: v2, green.
+<img src="screenshots/19-staging-v2.png" alt="Staging v2" style="border: 1px solid #d0d7de; border-radius: 6px;">
+*Staging before swap: v2, green.*
 
-![Web app menu](screenshots/20-web-app-menu.png)
-Web app menu with Deployment slots.
+<img src="screenshots/20-web-app-menu.png" alt="Web app menu" style="border: 1px solid #d0d7de; border-radius: 6px;">
+*Web app menu with Deployment slots.*
 
-![Swap notification](screenshots/21-swap-success-notification.png)
-Notification: successfully swapped slots `staging` and `production`.
+<img src="screenshots/21-swap-success-notification.png" alt="Swap notification" style="border: 1px solid #d0d7de; border-radius: 6px;">
+*Notification: successfully swapped slots `staging` and `production`.*
 
-![Production after swap](screenshots/22-production-after-swap.png)
-Production after swap: v2, green, `SLOT_LABEL` still `production`, `APP_MESSAGE` now `from staging`.
+<img src="screenshots/22-production-after-swap.png" alt="Production after swap" style="border: 1px solid #d0d7de; border-radius: 6px;">
+*Production after swap: v2, green, `SLOT_LABEL` still `production`, `APP_MESSAGE` now `from staging`.*
 
-![Staging after swap](screenshots/23-staging-after-swap.png)
-Staging after swap: v1, blue, `SLOT_LABEL` still `staging`, `APP_MESSAGE` now `from production`.
+<img src="screenshots/23-staging-after-swap.png" alt="Staging after swap" style="border: 1px solid #d0d7de; border-radius: 6px;">
+*Staging after swap: v1, blue, `SLOT_LABEL` still `staging`, `APP_MESSAGE` now `from production`.*
 
-![Autoscale rules](screenshots/24-autoscale-rules.png)
-Scale-out at CPU > 70%, scale-in at CPU < 30%.
+<img src="screenshots/24-autoscale-rules.png" alt="Autoscale rules" style="border: 1px solid #d0d7de; border-radius: 6px;">
+*Scale-out at CPU > 70%, scale-in at CPU < 30%.*
 
-![Configure custom backup](screenshots/25-configure-custom-backup.png)
-Custom backup configuration on `app-lab-1612`.
+<img src="screenshots/25-configure-custom-backup.png" alt="Configure custom backup" style="border: 1px solid #d0d7de; border-radius: 6px;">
+*Custom backup configuration on `app-lab-1612`.*
 
-![Backup list](screenshots/26-backup-list.png)
-Backups list: custom and automatic backups together.
+<img src="screenshots/26-backup-list.png" alt="Backup list" style="border: 1px solid #d0d7de; border-radius: 6px;">
+*Backups list: custom and automatic backups together.*
 
-![Web app menu backups](screenshots/27-web-app-menu-backups.png)
-Web app menu with Backups.
+<img src="screenshots/27-web-app-menu-backups.png" alt="Web app menu backups" style="border: 1px solid #d0d7de; border-radius: 6px;">
+*Web app menu with Backups.*
 
-![Backup storage container](screenshots/28-backup-storage-container.png)
-`stlabappbackup` storage account with the `appbackups` container.
+<img src="screenshots/28-backup-storage-container.png" alt="Backup storage container" style="border: 1px solid #d0d7de; border-radius: 6px;">
+*`stlabappbackup` storage account with the `appbackups` container.*
 
-![Resource group](screenshots/29-rg-lab-app-overview.png)
-`rg-lab-app` with the plan, web app, and backup storage.
+<img src="screenshots/29-rg-lab-app-overview.png" alt="Resource group" style="border: 1px solid #d0d7de; border-radius: 6px;">
+*`rg-lab-app` with the plan, web app, and backup storage.*
 
-## The web app
+## 5. The web app
 Three files, no `npm install`:
 - `server.js`: HTTP server showing version, slot name, and settings
 - `package.json`: start script `node server.js`, engine `node >=20`
@@ -120,7 +120,7 @@ Three files, no `npm install`:
 
 `main` branch is `v1` (blue). `staging` branch is `v2` (green).
 
-## Slot settings and the swap
+## 6. Slot settings and the swap
 
 | Setting | Deployment slot setting | Production | Staging |
 |---|---|---|---|
@@ -138,14 +138,14 @@ Three files, no `npm install`:
 - Deployment slots do not change which Git branch each slot tracks. After the swap, a push to `main` would redeploy `v1` over the swapped `v2`.
 - Both slots reported the same instance ID (`21a15b1d`) because slots share the plan's instance.
 
-## Autoscale
+## 7. Autoscale
 - Setting name `autoscale-asp-lab`, on `asp-lab`
 - Instance limits: minimum 1, maximum 2, default 1
 - **Scale-out:** average CPU > 70% over 10 minutes, then add 1 instance, cool down 5 minutes
 - **Scale-in:** average CPU < 30% over 10 minutes, then remove 1 instance, cool down 5 minutes
 - Metric-based only; no scheduled condition was configured
 
-## Backup
+## 8. Backup
 - **Automatic backup:** built-in, every 1 hour, free
 - **Custom backup:** configured daily with 7-day retention, stored in `stlabappbackup` / `appbackups` container
 - Both appear in the same list on the Backups page
@@ -153,13 +153,13 @@ Three files, no `npm install`:
 - Backup needs Standard or higher for custom backups (here Premium V3 P0V3); built-in automatic backups run hourly on all tiers
 - Keep at least one backup is ticked; retention is 7 days
 
-## Troubleshooting
+## 9. Troubleshooting
 - **GitHub OIDC deployment failed.** The portal generated an OIDC workflow, but the deployment failed with a token verification error. Fix: turned on SCM Basic Auth Publishing Credentials in Configuration > General settings and switched Deployment Center to use Basic authentication.
 - **Staging slot workflow failed on first run.** The Azure login step failed on the first run. The switch to Basic authentication (SCM Basic Auth Publishing Credentials) is the likely fix; the exact attempt that resolved it was not captured.
 - **`WEBSITE_SLOT_NAME` not set.** `printenv` via SSH confirmed the platform variable was absent on this Linux app. `server.js` was updated to derive the slot name from `WEBSITE_HOSTNAME` instead.
 - **First push rejected.** Azure had added a workflow file to `main` on GitHub. Fix: `git pull --rebase` before pushing.
 
-## Exam notes
+## 10. Exam notes
 - **Deployment slot settings:** a setting marked as a slot setting stays with the slot; it does not move on a swap. Use it for connection strings and settings that differ per environment.
 - **Slot swap:** moves the app code and all non-sticky settings. The swap is atomic and reversible by swapping back.
 - **The exam question:** "what happens to sticky settings on a swap?" - they stay with the slot.

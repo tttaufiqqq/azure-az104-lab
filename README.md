@@ -2,15 +2,16 @@
 
 Hands-on Azure administration lab built as one connected environment, not six separate demos. Each project reuses what the previous one created, and every step is documented with screenshots.
 
-## Goals
+## 1. Goals
 
 - Practise the AZ-104 exam domains by building and operating real resources
 - Show identity, networking, compute, monitoring, backup, and app hosting working together
 - Document each step with screenshots and short explanations
 
-## Architecture
+## 2. Architecture
 
-![Architecture diagram](docs/architecture.png)
+<img src="docs/architecture.png" alt="Architecture diagram" style="border: 1px solid #d0d7de; border-radius: 6px;">
+*Architecture diagram of the connected lab environment.*
 
 - **Identity:** Entra ID users and groups drive RBAC across every project
 - **Network:** one VNet with a resource subnet, a private endpoint subnet, and an NSG
@@ -19,7 +20,7 @@ Hands-on Azure administration lab built as one connected environment, not six se
 - **Operations:** one Log Analytics workspace, shared alerts, Recovery Services vault
 - **Governance:** tag policy and budget alert scoped to the subscription
 
-## Build Order
+## 3. Build Order
 
 | Step | Folder | Focus | Status |
 |---|---|---|---|
@@ -30,47 +31,47 @@ Hands-on Azure administration lab built as one connected environment, not six se
 | 5 | [05-entra-ca-pim](05-entra-ca-pim/) | Conditional Access, PIM, access review, sign-in logs | ✅ |
 | 6 | [06-app-service](06-app-service/) | Slots, warm-up swap, autoscale, backup | ✅ |
 
-## Project Summaries
+## 4. Project Summaries
 
-### 01 – Entra Users and Groups
+### 4.1 01 – Entra Users and Groups
 - Test users and security groups
 - Groups used later for RBAC, PIM, and access reviews
 
-### 02 – Network and Storage
+### 4.2 02 – Network and Storage
 - VNet with two subnets (resources, private endpoints)
 - NSG with explicit allow rules only
 - Storage account with public access off and a private endpoint
 - Private DNS zone linked to the VNet
 - ARM template to redeploy everything
 
-### 03 – VM and RBAC
+### 4.3 03 – VM and RBAC
 - VM placed in the resource subnet from step 2
 - Custom RBAC role scoped to the VM
 - Azure Policy enforcing required tags
 - Disk encryption configured
 - Budget alert at a set threshold
 
-### 04 – Monitoring and Backup
+### 4.4 04 – Monitoring and Backup
 - Metric alert (CPU) and log alert (KQL)
 - Log Analytics workspace with diagnostic settings
 - KQL query for an operational signal
 - Recovery Services vault, backup policy, and a verified test restore
 
-### 05 – Entra Conditional Access and PIM
+### 4.5 05 – Entra Conditional Access and PIM
 - Entra ID P2 trial and license assignment
 - Conditional Access policy requiring MFA for Azure management
 - PIM Security Reader role with approval-based activation
 - Access review on `grp-vm-operators`, decided and completed
 - Sign-in log check
 
-### 06 – App Service
+### 4.6 06 – App Service
 - Premium V3 P0V3 plan with production and staging slots
 - Node.js app deployed from GitHub ([az104-webapp](https://github.com/tttaufiqqq/az104-webapp))
 - Slot swap with warm-up, sticky `SLOT_LABEL` vs swapping `APP_MESSAGE`
 - CPU-based autoscale rules
 - Daily custom backup with 7-day retention
 
-## How the Projects Connect
+## 5. How the Projects Connect
 
 - The VM operators group from step 1 receives the custom RBAC role in step 3
 - The VM from step 3 sits in the network from step 2
@@ -79,7 +80,7 @@ Hands-on Azure administration lab built as one connected environment, not six se
 - The step 6 App Service deploys from [az104-webapp](https://github.com/tttaufiqqq/az104-webapp)
 - `02-network-storage/template.json` redeploys the network and storage
 
-## Repository Structure
+## 6. Repository Structure
 
 ```
 azure-az104-lab/
@@ -97,7 +98,7 @@ azure-az104-lab/
 - Each project folder has a `README.md` and a `screenshots/` folder
 - Each project README covers what was built, steps, and proof screenshots
 
-## Skills Demonstrated
+## 7. Skills Demonstrated
 
 - Entra ID, RBAC, Conditional Access, PIM, access reviews
 - Virtual networking, NSGs, private endpoints, private DNS
@@ -107,7 +108,7 @@ azure-az104-lab/
 - App Service, deployment slots, autoscaling
 - Infrastructure as code with ARM/Bicep
 
-## Notes
+## 8. Notes
 
 - Entra P2 trial needed for PIM and access reviews (started at step 5)
 - App Service slots, autoscale, and backup need Standard or higher (here Premium V3 P0V3; Standard S1 was not offered)
